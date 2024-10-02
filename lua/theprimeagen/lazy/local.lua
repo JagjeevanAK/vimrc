@@ -1,4 +1,4 @@
-local local_plugins = {--[[
+local local_plugins = {
     {
         "ThePrimeagen/harpoon",
         config = function()
@@ -22,4 +22,3 @@ local local_plugins = {--[[
 
 return local_plugins
 
-]]
