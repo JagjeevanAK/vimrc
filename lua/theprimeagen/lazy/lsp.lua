@@ -1,4 +1,4 @@
-return {
+return {--[[
     "neovim/nvim-lspconfig",
     dependencies = {
         "williamboman/mason.nvim",
@@ -105,3 +105,4 @@ return {
         })
     end
 }
+]]
