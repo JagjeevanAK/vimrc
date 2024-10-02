@@ -1,4 +1,4 @@
-return {
+return { --[[
     {
         "folke/trouble.nvim",
         config = function()
@@ -21,3 +21,4 @@ return {
         end
     },
 }
+]]
