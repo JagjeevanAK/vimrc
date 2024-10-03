@@ -1,5 +1,17 @@
 # Keybinding
 
+### `Netrw`
+---
+Common Commands for netrw
+:e . or :Ex: Open the current directory in netrw.
+- (while in netrw): Go up one directory level.
+Enter: Open the selected file or directory.
+d: Delete a file.
+%: Create a new file.
+D: Create a new directory.
+r: Rename a file.
+---
+
 ### From main `init.lua`
 ---
 Here's an explanation of each LSP mapping:
