@@ -3,7 +3,7 @@
 ### `Netrw`
 ---
 Common Commands for netrw
-1. **`:e`** . or **`:Ex:`** Open the current directory in netrw.
+1. **`:e .`** or **`:Ex:`** Open the current directory in netrw.
 2. **`-`** (while in netrw): Go up one directory level.
 3. **`Enter:`** Open the selected file or directory.
 4. **`d:`** Delete a file.
