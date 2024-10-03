@@ -3,13 +3,13 @@
 ### `Netrw`
 ---
 Common Commands for netrw
-:e . or :Ex: Open the current directory in netrw.
-- (while in netrw): Go up one directory level.
-Enter: Open the selected file or directory.
-d: Delete a file.
-%: Create a new file.
-D: Create a new directory.
-r: Rename a file.
+1. **`:e`** . or :Ex: Open the current directory in netrw.
+2. **`-`** (while in netrw): Go up one directory level.
+3. **`Enter:`** Open the selected file or directory.
+4. **`d:`** Delete a file.
+5. **`%:`** Create a new file.
+6. **`D:`** Create a new directory.
+7. **`r:`** Rename a file.
 ---
 
 ### From main `init.lua`
