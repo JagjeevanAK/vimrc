@@ -17,7 +17,7 @@ return {
             auto_install = true,
 
             indent = {
-                enable = true
+                enable = true,
             },
 
             highlight = {
@@ -43,4 +43,4 @@ return {
 
         vim.treesitter.language.register("templ", "templ")
     end
-}
+    }
