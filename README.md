@@ -37,6 +37,7 @@ Common Commands for netrw
 5. **`%:`** Create a new file.
 6. **`D:`** Create a new directory.
 7. **`r:`** Rename a file.
+8. **`/filename`** To reach the filename.
 
 ### From main `init.lua`
 
