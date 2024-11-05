@@ -33,9 +33,9 @@ Common Commands for netrw
 1. **`:e .`** or **`:Ex:`** Open the current directory in netrw.
 2. **`-`** (while in netrw): Go up one directory level.
 3. **`Enter:`** Open the selected file or directory.
-4. **`d:`** Delete a file.
+4. **`D:`** Delete a file.
 5. **`%:`** Create a new file.
-6. **`D:`** Create a new directory.
+6. **`d:`** Create a new directory.
 7. **`r:`** Rename a file.
 8. **`/filename`** To reach the filename.
 
