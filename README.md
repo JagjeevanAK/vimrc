@@ -1,5 +1,5 @@
 # Keybinding
----
+
 ### `Basic Vim Shortcuts`
 
 These are fundamental Vim and Neovim shortcuts that enhance navigation and editing:
