@@ -1,5 +1,32 @@
 # Keybinding
 
+### Basic Tmux Commands
+- **Prefix key** (default is `Ctrl + b`): Activates Tmux commands.
+- **Detach session**: `Prefix + d`
+- **List sessions**: `Prefix + s`
+- **Rename session**: `Prefix + $`
+- **New window**: `Prefix + c`
+- **Switch window**: `Prefix + [window number]` or `Prefix + n/p` for next/previous
+- **Split horizontally**: `Prefix + "`
+- **Split vertically**: `Prefix + %`
+- **Resize pane**: `Prefix + arrow keys`
+
+### Pane Management
+- **Switch between panes**: `Prefix + arrow keys` or `Prefix + o`
+- **Close pane**: `Prefix + x`
+- **Swap panes**: `Prefix + {` or `Prefix + }`
+- **Synchronize panes** (useful if you want to type in multiple panes at once): `Prefix + :` and type `setw synchronize-panes on`
+
+### Copy Mode
+- **Enter copy mode**: `Prefix + [`
+- **Scroll up/down**: Arrow keys or `PgUp`/`PgDn`
+- **Exit copy mode**: `q`
+- **Copy selection**: Press `Space` to start the selection, move the cursor, then `Enter` to copy
+
+### Clipboard (copy-paste between Tmux and system clipboard)
+- **Copy from Tmux to clipboard** (requires setup): `Prefix + ]`
+
+
 ### `Basic Vim Shortcuts`
 
 These are fundamental Vim and Neovim shortcuts that enhance navigation and editing:
