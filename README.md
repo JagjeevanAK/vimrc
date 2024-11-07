@@ -1,6 +1,6 @@
 # Keybinding
 
-### Basic Tmux Commands
+### `Basic Tmux Commands`
 - **Prefix key** (default is `Ctrl + b`): Activates Tmux commands.
 - **Detach session**: `Prefix + d`
 - **List sessions**: `Prefix + s`
@@ -25,7 +25,7 @@
 
 ### Clipboard (copy-paste between Tmux and system clipboard)
 - **Copy from Tmux to clipboard** (requires setup): `Prefix + ]`
-
+---
 
 ### `Basic Vim Shortcuts`
 
