@@ -1,7 +1,7 @@
 # Keybinding
 
 ### `Basic Tmux Commands`
-- **Prefix key** (default is `Ctrl + b`): Activates Tmux commands.
+- **Prefix key** (default is `Ctrl + s`): Activates Tmux commands.
 - **Detach session**: `Prefix + d`
 - **List sessions**: `Prefix + s`
 - **Rename session**: `Prefix + $`
