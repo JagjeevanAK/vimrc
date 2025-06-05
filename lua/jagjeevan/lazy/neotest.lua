@@ -22,9 +22,10 @@ return {
                 }
             })
 
+            -- Test runner keymaps
             vim.keymap.set("n", "<leader>tc", function()
                 neotest.run.run()
-            end)
+            end) -- Run current test or test file
         end,
     },
 }
