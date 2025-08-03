@@ -1,7 +1,7 @@
 return{
   {
     'github/copilot.vim',
-    enabled = false, -- Disable copilot for now
+    enabled = true, -- To disable copilot for now use arg false
     config = function()
       vim.g.copilot_no_tab_map = true
       -- Copilot keymaps
