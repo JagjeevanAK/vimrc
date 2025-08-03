@@ -55,9 +55,48 @@ vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>") -- O
 -- Code formatting
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format) -- Format current buffer with LSP
 
+-- LSP keymaps for better development experience
+vim.keymap.set("n", "gd", vim.lsp.buf.definition) -- Go to definition
+vim.keymap.set("n", "gD", vim.lsp.buf.declaration) -- Go to declaration
+vim.keymap.set("n", "gr", vim.lsp.buf.references) -- Show references
+vim.keymap.set("n", "gi", vim.lsp.buf.implementation) -- Go to implementation
+vim.keymap.set("n", "K", vim.lsp.buf.hover) -- Show hover information
+vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help) -- Show signature help
+vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename) -- Rename symbol
+vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action) -- Show code actions
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float) -- Show diagnostic in floating window
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev) -- Go to previous diagnostic
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next) -- Go to next diagnostic
+
+-- React/TypeScript specific keymaps
+vim.keymap.set("n", "<leader>rf", function()
+    -- Auto-fix ESLint issues
+    vim.cmd("EslintFixAll")
+end) -- ESLint auto-fix
+
+vim.keymap.set("n", "<leader>ri", function()
+    -- Organize imports (TypeScript)
+    vim.lsp.buf.code_action({
+        apply = true,
+        context = {
+            only = { "source.organizeImports" }
+        }
+    })
+end) -- Organize imports
+
+vim.keymap.set("n", "<leader>ra", function()
+    -- Add missing imports (TypeScript)
+    vim.lsp.buf.code_action({
+        apply = true,
+        context = {
+            only = { "source.addMissingImports" }
+        }
+    })
+end) -- Add missing imports
+
 -- Quickfix and location list navigation
-vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz") -- Next quickfix item and center cursor
-vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz") -- Previous quickfix item and center cursor
+vim.keymap.set("n", "<C-n>", "<cmd>cnext<CR>zz") -- Next quickfix item and center cursor
+vim.keymap.set("n", "<C-p>", "<cmd>cprev<CR>zz") -- Previous quickfix item and center cursor
 vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz") -- Next location list item and center cursor
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz") -- Previous location list item and center cursor
 

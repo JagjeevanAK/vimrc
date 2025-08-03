@@ -33,6 +33,9 @@ return {
                 "pyright",
                 "clangd",
                 "ts_ls",
+                "eslint",
+                "tailwindcss",
+                "emmet_ls",
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -60,9 +63,140 @@ return {
                 ["ts_ls"] = function()
                     local lspconfig = require("lspconfig")
                     lspconfig.ts_ls.setup {
-                    capabilities = capabilities,
-                    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-                     }
+                        capabilities = capabilities,
+                        filetypes = { 
+                            "javascript", 
+                            "javascriptreact", 
+                            "typescript", 
+                            "typescriptreact",
+                            "vue",
+                            "json"
+                        },
+                        settings = {
+                            typescript = {
+                                inlayHints = {
+                                    includeInlayParameterNameHints = 'all',
+                                    includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                                    includeInlayFunctionParameterTypeHints = true,
+                                    includeInlayVariableTypeHints = true,
+                                    includeInlayPropertyDeclarationTypeHints = true,
+                                    includeInlayFunctionLikeReturnTypeHints = true,
+                                    includeInlayEnumMemberValueHints = true,
+                                }
+                            },
+                            javascript = {
+                                inlayHints = {
+                                    includeInlayParameterNameHints = 'all',
+                                    includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                                    includeInlayFunctionParameterTypeHints = true,
+                                    includeInlayVariableTypeHints = true,
+                                    includeInlayPropertyDeclarationTypeHints = true,
+                                    includeInlayFunctionLikeReturnTypeHints = true,
+                                    includeInlayEnumMemberValueHints = true,
+                                }
+                            }
+                        }
+                    }
+                end,
+
+                ["eslint"] = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.eslint.setup {
+                        capabilities = capabilities,
+                        filetypes = { 
+                            "javascript", 
+                            "javascriptreact", 
+                            "typescript", 
+                            "typescriptreact",
+                            "vue",
+                            "svelte"
+                        },
+                        settings = {
+                            codeAction = {
+                                disableRuleComment = {
+                                    enable = true,
+                                    location = "separateLine"
+                                },
+                                showDocumentation = {
+                                    enable = true
+                                }
+                            },
+                            codeActionOnSave = {
+                                enable = false,
+                                mode = "all"
+                            },
+                            format = true,
+                            nodePath = "",
+                            onIgnoredFiles = "off",
+                            packageManager = "npm",
+                            quiet = false,
+                            rulesCustomizations = {},
+                            run = "onType",
+                            useESLintClass = false,
+                            validate = "on",
+                            workingDirectory = {
+                                mode = "location"
+                            }
+                        }
+                    }
+                end,
+
+                ["tailwindcss"] = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.tailwindcss.setup {
+                        capabilities = capabilities,
+                        filetypes = { 
+                            "html", 
+                            "css", 
+                            "scss", 
+                            "javascript", 
+                            "javascriptreact", 
+                            "typescript", 
+                            "typescriptreact",
+                            "vue",
+                            "svelte"
+                        },
+                        settings = {
+                            tailwindCSS = {
+                                classAttributes = { "class", "className", "class:list", "classList", "ngClass" },
+                                lint = {
+                                    cssConflict = "warning",
+                                    invalidApply = "error",
+                                    invalidConfigPath = "error",
+                                    invalidScreen = "error",
+                                    invalidTailwindDirective = "error",
+                                    invalidVariant = "error",
+                                    recommendedVariantOrder = "warning"
+                                },
+                                validate = true
+                            }
+                        }
+                    }
+                end,
+
+                ["emmet_ls"] = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.emmet_ls.setup {
+                        capabilities = capabilities,
+                        filetypes = { 
+                            "html", 
+                            "css", 
+                            "scss", 
+                            "javascript", 
+                            "javascriptreact", 
+                            "typescript", 
+                            "typescriptreact",
+                            "vue",
+                            "svelte"
+                        },
+                        init_options = {
+                            html = {
+                                options = {
+                                    ["bem.enabled"] = true,
+                                },
+                            },
+                        }
+                    }
                 end,
 
                 ["lua_ls"] = function()
