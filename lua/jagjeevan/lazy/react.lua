@@ -86,7 +86,6 @@ return {
             vim.keymap.set("n", "<leader>pu", require("package-info").update, { desc = "Update dependency on the line" })
             vim.keymap.set("n", "<leader>pd", require("package-info").delete, { desc = "Delete dependency on the line" })
             vim.keymap.set("n", "<leader>pi", require("package-info").install, { desc = "Install a new dependency" })
-            vim.keymap.set("n", "<leader>pr", require("package-info").reinstall, { desc = "Reinstall dependencies" })
             vim.keymap.set("n", "<leader>pv", require("package-info").change_version, { desc = "Change dependency version" })
         end,
     },

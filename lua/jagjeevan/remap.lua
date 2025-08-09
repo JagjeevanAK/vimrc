@@ -23,15 +23,6 @@ vim.keymap.set("n", "N", "Nzzzv") -- Previous search result and center cursor
 -- LSP and plugin management
 vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>") -- Restart LSP server
 
--- Vim-with-me plugin (collaborative editing)
-vim.keymap.set("n", "<leader>vwm", function()
-    require("vim-with-me").StartVimWithMe()
-end) -- Start vim-with-me collaborative session
-
-vim.keymap.set("n", "<leader>svwm", function()
-    require("vim-with-me").StopVimWithMe()
-end) -- Stop vim-with-me collaborative session
-
 -- Advanced clipboard operations (ThePrimeagen's favorites)
 -- greatest remap ever
 vim.keymap.set("x", "<leader>p", [["_dP]]) -- Paste over selection without losing clipboard content
@@ -46,11 +37,12 @@ vim.keymap.set({"n", "v"}, "<leader>d", [["_d]]) -- Delete without affecting cli
 -- This is going to get me cancelled
 vim.keymap.set("i", "<C-c>", "<Esc>") -- Use Ctrl+C as Escape alternative
 
--- Disable problematic commands
-vim.keymap.set("n", "Q", "<nop>") -- Disable Ex mode (Q command)
-
 -- External tool integration
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>") -- Open tmux sessionizer
+
+-- Quick word hopping
+vim.keymap.set("n", "<leader>w", "/\\<", {}) -- Search for words starting with... (type letters after)
+vim.keymap.set("n", "<leader>W", "?\\<", {}) -- Search backwards for words starting with...
 
 -- Code formatting
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format) -- Format current buffer with LSP
