@@ -1,7 +1,7 @@
 return  {
     "nvim-telescope/telescope.nvim",
 
-    tag = "0.1.5",
+    tag = "0.1.8",
 
     dependencies = {
         "nvim-lua/plenary.nvim"
@@ -14,11 +14,11 @@ return  {
         -- File finding and searching keymaps
         vim.keymap.set('n', '<leader>pf', builtin.find_files, {}) -- Find files in project
         vim.keymap.set('n', '<C-p>', builtin.git_files, {}) -- Find git-tracked files
-        vim.keymap.set('n', '<leader>ps', function()
+        vim.keymap.set('n', '<leader>pus', function()
             local word = vim.fn.expand("<cword>")
             builtin.grep_string({ search = word })
         end) -- Search for word under cursor
-        vim.keymap.set('n', '<leader>pWs', function()
+        vim.keymap.set('n', '<leader>pws', function()
             local word = vim.fn.expand("<cWORD>")
             builtin.grep_string({ search = word })
         end) -- Search for WORD under cursor (including special chars)

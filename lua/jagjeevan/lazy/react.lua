@@ -80,7 +80,7 @@ return {
             })
             
             -- Keymaps for package-info
-            vim.keymap.set("n", "<leader>ps", require("package-info").show, { desc = "Show dependency versions" })
+            vim.keymap.set("n", "<leader>psv", require("package-info").show, { desc = "Show dependency versions" })
             vim.keymap.set("n", "<leader>pc", require("package-info").hide, { desc = "Hide dependency versions" })
             vim.keymap.set("n", "<leader>pt", require("package-info").toggle, { desc = "Toggle dependency versions" })
             vim.keymap.set("n", "<leader>pu", require("package-info").update, { desc = "Update dependency on the line" })
