@@ -128,11 +128,12 @@ Neovim configuration sets up the **vim-fugitive** plugin for Git integration. He
    - When entering a buffer with the filetype `fugitive`, it sets up additional key mappings:
      - **`<leader>p`**: Executes `git push`.
      - **`<leader>P`**: Executes `git pull --rebase`.
-     - **`<leader>t`**: Prompts for branch tracking during push.
-     - **`<C-s>`**: Executes `git push -u origin`.
+     - **`<leader>t`**: Prompts for branch tracking during push (`:Git push -u origin `).
+     - **`<leader>ad`**: Add all changes (`git add .`).
+     - **`<leader>c`**: Commit with interactive message prompt.
 3. **Diff Commands**:
-   - **`gu`**: Gets changes from the second version.
-   - **`gh`**: Gets changes from the third version.
+   - **`gu`**: Gets changes from the left side (target branch) during merge conflicts.
+   - **`gh`**: Gets changes from the right side (merge branch) during merge conflicts.
 
 These mappings enhance Git workflow directly within Neovim.
 
@@ -141,16 +142,13 @@ These mappings enhance Git workflow directly within Neovim.
 The **Harpoon** plugin for Neovim helps manage and quickly navigate to files. Here's a breakdown:
 1. **`<leader>a`**: Adds the current file to Harpoon's list.
 2. **`<C-e>`**: Toggles the quick menu to navigate between marked files.
-3. **File Navigation**:
+3. **`<leader>hr`**: Remove current file from Harpoon list.
+4. **`<leader>hc`**: Clear all files from Harpoon list.
+5. **File Navigation**:
    - **`<C-h>`**: Navigate to the first marked file.
-   - **`<C-t>`**: Navigate to the second marked file.
+   - **`<C-j>`**: Navigate to the second marked file.
    - **`<C-n>`**: Navigate to the third marked file.
-   - **`<C-s>`**: Navigate to the fourth marked file.
-4. **Replace Marked Files**:
-   - **`<leader><C-h>`**: Replace the first marked file.
-   - **`<leader><C-t>`**: Replace the second marked file.
-   - **`<leader><C-n>`**: Replace the third marked file.
-   - **`<leader><C-s>`**: Replace the fourth marked file.
+   - **`<C-m>`**: Navigate to the fourth marked file.
 
 These mappings streamline file management and navigation within your Neovim workflow.
 
@@ -201,4 +199,20 @@ It creates a key mapping:
 - **`<leader>u`**: Toggles the display of the undo tree, allowing you to visualize and navigate through the history of changes made in your files.
 
 This feature helps in efficiently managing and reverting changes.
+
+### `ToggleTerm`
+
+**ToggleTerm** is a Neovim plugin that provides terminal integration within the editor. It allows you to open floating, horizontal, or vertical terminals with custom configurations.
+
+Key mappings:
+- **`<leader>tf`**: Opens a floating terminal window.
+- **`<leader>th`**: Opens a horizontal terminal (split at bottom).
+- **`<leader>tv`**: Opens a vertical terminal (split on the side).
+
+**Terminal Mode Navigation**:
+- **`<Esc>` or `jk`**: Exit terminal mode to normal mode.
+- **`<C-h>`, `<C-j>`, `<C-k>`, `<C-l>`**: Navigate between windows from terminal mode.
+- **`<C-w>`**: Enter window command mode from terminal.
+
+This setup enhances terminal workflow by providing quick access to different terminal layouts.
 
