@@ -80,45 +80,78 @@ Here's an explanation of each LSP mapping:
 9. **`[d`**: Jump to the next diagnostic message (like an error or warning) in the buffer.
 10. **`]d`**: Jump to the previous diagnostic message in the buffer.
 
-### `Lazy_init.lua`
+### `Core Keybindings (from remap.lua)`
 
-1. **`vim.g.mapleader = " "`**: Sets the leader key to the spacebar.
-2. **`<leader>pv`**: Opens the file explorer (Netrw) in the current directory.
-3. **Visual Mode `yyy`**: Yanks the selected text into the system clipboard.
-4. **Visual Mode `J`**: Moves the selected lines down by one and re-selects them.
-5. **Visual Mode `K`**: Moves the selected lines up by one and re-selects them.
-6. **Normal Mode `J`**: Joins the current line with the next line while maintaining the cursor position.
-7. **Normal Mode `<C-d>`**: Scrolls down half a screen and centers the cursor.
-8. **Normal Mode `<C-u>`**: Scrolls up half a screen and centers the cursor.
-9. **Normal Mode `n`**: Searches for the next occurrence of the last search and centers the cursor.
-10. **Normal Mode `N`**: Searches for the previous occurrence of the last search and centers the cursor.
-11. **Normal Mode `<leader>zig`**: Restarts the LSP server.
-12. **Normal Mode `<leader>vwm`**: Starts a session with the "vim-with-me" plugin.
-13. **Normal Mode `<leader>svwm`**: Stops a session with the "vim-with-me" plugin.
-14. **Visual Mode `<leader>p`**: Pastes the text from the unnamed register while deleting the selection.
-15. **Normal/Visual Mode `<leader>y`**: Yanks the selected or current line to the system clipboard.
-16. **Normal Mode `<leader>Y`**: Yanks the entire line to the system clipboard.
-17. **Normal/Visual Mode `<leader>d`**: Deletes the selected text without affecting the unnamed register.
-18. **Insert Mode `<C-c>`**: Exits insert mode.
-19. **Normal Mode `Q`**: Disables the `Q` command.
-20. **Normal Mode `<C-f>`**: Opens a new tmux window with the sessionizer tool.
-21. **Normal Mode `<leader>f`**: Formats the current buffer using the LSP format command.
-22. **Normal Mode `<C-k>`**: Navigates to the next quickfix item and centers the cursor.
-23. **Normal Mode `<C-j>`**: Navigates to the previous quickfix item and centers the cursor.
-24. **Normal Mode `<leader>k`**: Navigates to the next location in the location list.
-25. **Normal Mode `<leader>j`**: Navigates to the previous location in the location list.
-26. **Normal Mode `<leader>s`**: Opens a search-and-replace command for the word under the cursor.
-27. **Normal Mode `<leader>x`**: Makes the current file executable.
-28. **Normal Mode `<leader>ee`**: Inserts a basic error handling template in Go.
-29. **Normal Mode `<leader>vpp`**: Opens the specified Neovim configuration file.
-30. **Normal Mode `<leader>mr`**: Triggers a "make it rain" animation with the Cellular Automaton plugin.
-31. **Normal Mode `<leader><leader>`**: Sources the current configuration file, reloading changes.
+**Leader Key**: The leader key is set to spacebar (`<leader> = " "`).
+
+**File and Navigation**:
+1. **`<leader>pv`**: Opens file explorer (netrw) in current directory.
+2. **`<leader>w`**: Search for words starting with... (forward search).
+3. **`<leader>W`**: Search for words starting with... (backward search).
+
+**Clipboard Operations**:
+4. **Visual Mode `yyy`**: Yanks the selected text into the system clipboard.
+5. **Visual Mode `<leader>p`**: Pastes without losing clipboard content (greatest remap ever).
+6. **Normal/Visual Mode `<leader>y`**: Yanks to system clipboard.
+7. **Normal Mode `<leader>Y`**: Yanks entire line to system clipboard.
+8. **Normal/Visual Mode `<leader>d`**: Deletes without affecting clipboard.
+
+**Line Movement**:
+9. **Visual Mode `J`**: Moves selected lines down and re-selects them.
+10. **Visual Mode `K`**: Moves selected lines up and re-selects them.
+11. **Normal Mode `J`**: Joins lines while maintaining cursor position.
+
+**Enhanced Navigation**:
+12. **Normal Mode `<C-d>`**: Scrolls down half a screen and centers cursor.
+13. **Normal Mode `<C-u>`**: Scrolls up half a screen and centers cursor.
+14. **Normal Mode `n`**: Next search result and centers cursor.
+15. **Normal Mode `N`**: Previous search result and centers cursor.
+
+**LSP and Development**:
+16. **Normal Mode `<leader>zig`**: Restarts the LSP server.
+17. **Normal Mode `<leader>f`**: Formats current buffer using LSP.
+18. **Normal Mode `gd`**: Go to definition.
+19. **Normal Mode `gD`**: Go to declaration.
+20. **Normal Mode `gr`**: Show references.
+21. **Normal Mode `gi`**: Go to implementation.
+22. **Normal Mode `K`**: Show hover information.
+23. **Normal Mode `<C-k>`**: Show signature help.
+24. **Normal Mode `<leader>rn`**: Rename symbol.
+25. **Normal Mode `<leader>ca`**: Show code actions.
+26. **Normal Mode `<leader>e`**: Show diagnostic in floating window.
+27. **Normal Mode `[d`**: Go to previous diagnostic.
+28. **Normal Mode `]d`**: Go to next diagnostic.
+
+**React/TypeScript Specific**:
+29. **Normal Mode `<leader>rf`**: ESLint auto-fix.
+30. **Normal Mode `<leader>ri`**: Organize imports.
+31. **Normal Mode `<leader>ra`**: Add missing imports.
+
+**Quickfix and Location List**:
+32. **Normal Mode `<C-n>`**: Next quickfix item and center cursor.
+33. **Normal Mode `<C-p>`**: Previous quickfix item and center cursor.
+34. **Normal Mode `<leader>k`**: Next location list item and center cursor.
+35. **Normal Mode `<leader>j`**: Previous location list item and center cursor.
+
+**Text Manipulation**:
+36. **Normal Mode `<leader>s`**: Search and replace word under cursor.
+37. **Normal Mode `<leader>x`**: Make current file executable.
+
+**Language-Specific**:
+38. **Normal Mode `<leader>ee`**: Insert Go error handling block.
+
+**Configuration and Utilities**:
+39. **Insert Mode `<C-c>`**: Alternative to Escape.
+40. **Normal Mode `<C-f>`**: Open tmux sessionizer.
+41. **Normal Mode `<leader>vpp`**: Open lazy configuration file.
+42. **Normal Mode `<leader>mr`**: Trigger cellular automaton animation.
+43. **Normal Mode `<leader><leader>`**: Source/reload current configuration.
 
 ### `Copilot`
 
-#### Control + J will trigger Copilot to accept the currently suggested code completion
+**GitHub Copilot** provides AI-powered code suggestions and completions.
 
-- **`<C-J>`**: Triggers Copilot to accept the currently suggested code completion.
+- **`<Tab>`** (Insert Mode): Accepts the currently suggested code completion from Copilot.
 
 ### `Fugitive`
 
@@ -181,12 +214,14 @@ This setup enhances coding efficiency by streamlining snippet management.
 
 ### `Telescope`
 
-This code configures the **Telescope** plugin in Neovim, enhancing file searching and navigation capabilities. Key mappings are established:
-- **`<leader>pf`**: Opens a file finder.
-- **`<C-p>`**: Searches for Git files.
-- **`<leader>ps`**: Greps the word under the cursor.
-- **`<leader>pWs`**: Greps the word (with uppercase).
-- **`<leader>vh`**: Lists help tags.
+**Telescope** is a fuzzy finder plugin that enhances file searching and navigation capabilities. Key mappings are:
+
+- **`<leader>pf`**: Opens a file finder (find files in project).
+- **`<C-p>`**: Searches for Git-tracked files.
+- **`<leader>pus`**: Grep search with user input.
+- **`<leader>pws`**: Grep search for word under cursor (workspace).
+- **`<leader>ps`**: Grep search for word under cursor.
+- **`<leader>vh`**: Lists help tags for documentation search.
 
 These mappings streamline file and content searches, improving workflow efficiency in Neovim.
 
@@ -215,4 +250,33 @@ Key mappings:
 - **`<C-w>`**: Enter window command mode from terminal.
 
 This setup enhances terminal workflow by providing quick access to different terminal layouts.
+
+### `React Development & Package Management`
+
+**Package Info Plugin** provides dependency management for JavaScript/TypeScript projects:
+
+- **`<leader>psv`**: Show dependency versions.
+- **`<leader>pc`**: Hide dependency versions.
+- **`<leader>pt`**: Toggle dependency versions.
+- **`<leader>pu`**: Update dependency on the current line.
+- **`<leader>pd`**: Delete dependency on the current line.
+- **`<leader>pi`**: Install a new dependency.
+- **`<leader>pv`**: Change dependency version.
+
+**REST Client** for API testing:
+
+- **`<leader>rr`**: Run REST request.
+- **`<leader>rl`**: Run last REST request.
+
+These mappings enhance React/JavaScript development workflow.
+
+### `Trouble`
+
+**Trouble** provides a diagnostics list and quickfix enhancement:
+
+- **`<leader>tt`**: Toggle trouble list.
+- **`[t`**: Go to previous trouble item.
+- **`]t`**: Go to next trouble item.
+
+This plugin helps navigate and manage code diagnostics efficiently.
 
