@@ -20,23 +20,26 @@ return {
                 
                 -- Git workflow keymaps (only available in fugitive buffers)
                 vim.keymap.set("n", "<leader>p", function()
-                    vim.cmd.Git('push')
+                    vim.cmd("Git push")
                 end, opts) -- Git push
 
                 -- rebase always
                 vim.keymap.set("n", "<leader>P", function()
-                    vim.cmd.Git({'pull',  '--rebase'})
+                    vim.cmd("Git pull --rebase")
                 end, opts) -- Git pull with rebase
 
                 -- NOTE: It allows me to easily set the branch i am pushing and any tracking
                 -- needed if i did not set the branch up correctly
                 vim.keymap.set("n", "<leader>t", ":Git push -u origin ", opts) -- Set upstream and push
-                vim.keymap.set("n", "<leader>ad", ":Git add . ", opts) -- Add all changes
+                
+                vim.keymap.set("n", "<leader>ga", function()
+                    vim.cmd("Git add .")
+                end, opts) -- Add all changes
 
-                vim.keymap.set("n", "<leader>c", function()
+                vim.keymap.set("n", "<leader>gc", function()
                     vim.ui.input({ prompt = "Commit message: " }, function(message)
                         if message and message ~= "" then
-                            vim.cmd.Git('commit -m "' .. message .. '"')
+                            vim.cmd("Git commit -m " .. vim.fn.shellescape(message))
                         end
                     end)
                 end, opts) -- Commit with message prompt
