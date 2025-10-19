@@ -1,8 +1,8 @@
 
-return {--[[
+return {
     "folke/zen-mode.nvim",
     config = function()
-        vim.keymap.set("n", "<leader>zz", function()
+        vim.keymap.set("n", "<leader>zZ", function()
             require("zen-mode").setup {
                 window = {
                     width = 90,
@@ -17,7 +17,7 @@ return {--[[
         end)
 
 
-        vim.keymap.set("n", "<leader>zZ", function()
+        vim.keymap.set("n", "<leader>zz", function()
             require("zen-mode").setup {
                 window = {
                     width = 80,
@@ -32,6 +32,6 @@ return {--[[
             ColorMyPencils()
         end)
     end
---]]}
+}
 
 

@@ -1,5 +1,3 @@
-
-
 -- Set leader key to spacebar for easy access to custom commands
 vim.g.mapleader = " "
 
