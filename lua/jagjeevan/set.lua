@@ -6,7 +6,7 @@ vim.opt.relativenumber = true
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
+vim.opt.expandtab = false
 
 vim.opt.smartindent = true
 
@@ -73,7 +73,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- Auto-organize imports on save for TypeScript files
 vim.api.nvim_create_autocmd("BufWritePre", {
-    group = "ReactSettings", 
+    group = "ReactSettings",
     pattern = { "*.ts", "*.tsx" },
     callback = function()
         vim.lsp.buf.code_action({
