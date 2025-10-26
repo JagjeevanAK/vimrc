@@ -32,9 +32,6 @@ vim.keymap.set("n", "<leader>Y", [["+Y]]) -- Yank entire line to system clipboar
 vim.keymap.set({"n", "v"}, "<leader>d", [["_d]]) -- Delete without affecting clipboard
 
 -- Insert mode improvements
--- This is going to get me cancelled
-vim.keymap.set("i", "<C-c>", "<Esc>") -- Use Ctrl+C as Escape alternative
-
 -- External tool integration
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>") -- Open tmux sessionizer
 
