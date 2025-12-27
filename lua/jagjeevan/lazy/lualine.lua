@@ -39,8 +39,28 @@ return {
                     }
                 },
                 lualine_x = {'encoding', 'fileformat', 'filetype'},
-                lualine_y = {'progress'},
-                lualine_z = {'location'}
+                lualine_y = {
+                    function()
+                        local handle = io.popen("pmset -g batt | awk '/%/ {gsub(/;/,\"\"); print $3}'")
+                        if handle then
+                            local result = handle:read("*l")
+                            handle:close()
+                            if result then
+                                local pct = tonumber(result:match("(%d+)")) or 0
+                                local icon = pct >= 75 and "󰁹" or pct >= 50 and "󰁿" or pct >= 25 and "󰁽" or "󰁻"
+                                return icon .. " " .. pct .. "%%"
+                            end
+                        end
+                        return "󰂑 --"
+                    end
+                },
+                lualine_z = {
+                    function()
+                        local utc_time = os.time(os.date("!*t"))
+                        local ist_time = utc_time + (5 * 3600) + (30 * 60)
+                        return "󰥔 " .. os.date("%I:%M %p", ist_time)
+                    end
+                }
             },
             inactive_sections = {
                 lualine_a = {},
