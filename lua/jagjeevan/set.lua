@@ -11,6 +11,37 @@ vim.opt.expandtab = true
 vim.opt.smartindent = true
 vim.opt.autoindent = true
 
+-- Enable filetype detection, plugins, and indentation
+vim.cmd("filetype plugin indent on")
+
+-- Configure diagnostics to show errors inline automatically
+vim.diagnostic.config({
+    virtual_text = {
+        prefix = "●", -- Could be '■', '▎', 'x', '●', etc.
+        spacing = 4,
+        source = "if_many", -- Show source if there are multiple diagnostics
+    },
+    signs = {
+        text = {
+            [vim.diagnostic.severity.ERROR] = "",
+            [vim.diagnostic.severity.WARN] = "",
+            [vim.diagnostic.severity.INFO] = "",
+            [vim.diagnostic.severity.HINT] = "󰌵",
+        },
+    },
+    underline = true,
+    update_in_insert = false, -- Don't show diagnostics while typing
+    severity_sort = true, -- Show errors before warnings
+    float = {
+        focusable = false,
+        style = "minimal",
+        border = "rounded",
+        source = "always",
+        header = "",
+        prefix = "",
+    },
+})
+
 vim.opt.wrap = false
 vim.opt.linebreak = true
 
@@ -53,6 +84,11 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.opt_local.softtabstop = 2
         vim.opt_local.shiftwidth = 2
         vim.opt_local.expandtab = true
+        -- Disable smartindent for these filetypes as treesitter handles indentation
+        vim.opt_local.smartindent = false
+        vim.opt_local.cindent = false
+        vim.opt_local.autoindent = true
+        vim.opt_local.indentexpr = "nvim_treesitter#indent()"
     end,
 })
 
