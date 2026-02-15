@@ -23,14 +23,23 @@ return {
                     background = "Normal",
                 },
             },
+            on_open = function(term)
+                vim.schedule(function()
+                    vim.api.nvim_set_current_buf(term.bufnr)
+                    vim.cmd("startinsert!")
+                end)
+            end,
         })
 
         -- Set keymaps for terminal
         function _G.set_terminal_keymaps()
             local opts = {buffer = 0}
-            -- Exit terminal mode
+            -- Terminal mode: Esc just exits to normal mode (does NOT close)
             vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
             vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
+
+            -- Normal mode inside terminal buffer: Esc closes toggleterm
+            vim.keymap.set('n', '<esc>', '<cmd>ToggleTerm<cr>', opts)
 
             -- Window navigation - exit terminal mode first, then navigate
             vim.keymap.set('t', '<C-h>', [[<C-\><C-n><C-w>h]], opts)
@@ -46,8 +55,11 @@ return {
         vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 
         -- Terminal keymaps
-        vim.keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr><cmd>startinsert<cr>", { desc = "Terminal Float" })
-        vim.keymap.set("n", "<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<cr><cmd>startinsert<cr>", { desc = "Terminal Horizontal" })
-        vim.keymap.set("n", "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr><cmd>startinsert<cr>", { desc = "Terminal Vertical" })
+        vim.keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "Terminal Float" })
+        vim.keymap.set("n", "<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<cr>", { desc = "Terminal Horizontal" })
+        vim.keymap.set("n", "<leader>tv", function()
+            local half = math.floor(vim.o.columns / 2)
+            vim.cmd("ToggleTerm size=" .. half .. " direction=vertical")
+        end, { desc = "Terminal Vertical" })
     end,
 }
