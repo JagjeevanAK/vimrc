@@ -46,8 +46,8 @@ return {
         vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 
         -- Terminal keymaps
-        vim.keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "Terminal Float" })
-        vim.keymap.set("n", "<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<cr>", { desc = "Terminal Horizontal" })
-        vim.keymap.set("n", "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", { desc = "Terminal Vertical" })
+        vim.keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr><cmd>startinsert<cr>", { desc = "Terminal Float" })
+        vim.keymap.set("n", "<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<cr><cmd>startinsert<cr>", { desc = "Terminal Horizontal" })
+        vim.keymap.set("n", "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr><cmd>startinsert<cr>", { desc = "Terminal Vertical" })
     end,
 }
