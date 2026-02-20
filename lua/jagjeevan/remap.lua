@@ -32,6 +32,9 @@ vim.keymap.set("n", "<leader>Y", [["+Y]]) -- Yank entire line to system clipboar
 vim.keymap.set({"n", "v"}, "<leader>d", [["_d]]) -- Delete without affecting clipboard
 
 -- Insert mode improvements
+vim.keymap.set("i", "<C-a>", "<C-o>^") -- Jump to first non-blank character (start of line)
+vim.keymap.set("i", "<C-e>", "<End>")  -- Jump to end of line
+
 -- External tool integration
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>") -- Open tmux sessionizer
 
@@ -101,6 +104,17 @@ vim.keymap.set(
 -- Configuration and plugin shortcuts
 vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.config/nvim/lua/jagjeevan/lazy_init.lua<CR>") -- Open lazy config
 vim.keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>") -- Trigger cellular automaton animation
+
+-- Smart 0: toggle between first non-blank character and column 0
+vim.keymap.set("n", "0", function()
+    local col = vim.fn.col(".")
+    local first_non_blank = vim.fn.match(vim.fn.getline("."), "\\S") + 1
+    if col == first_non_blank then
+        vim.cmd("normal! 0")
+    else
+        vim.cmd("normal! ^")
+    end
+end, { desc = "Smart 0: toggle between ^ and 0" })
 
 -- Configuration reloading
 vim.keymap.set("n", "<leader><leader>", function()
