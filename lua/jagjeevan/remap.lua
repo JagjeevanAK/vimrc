@@ -33,7 +33,7 @@ vim.keymap.set({"n", "v"}, "<leader>d", [["_d]]) -- Delete without affecting cli
 
 -- Insert mode improvements
 vim.keymap.set("i", "<C-a>", "<C-o>^") -- Jump to first non-blank character (start of line)
-vim.keymap.set("i", "<C-e>", "<End>")  -- Jump to end of line
+vim.keymap.set("i", "<C-e>", "<C-o>$")  -- Jump to end of line
 
 -- External tool integration
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>") -- Open tmux sessionizer

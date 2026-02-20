@@ -147,7 +147,7 @@ const [{}, set{}] = useState<{}>({});
             vim.keymap.set({"i", "s"}, "<C-s>;", function() ls.jump(1) end, {silent = true}) -- Jump to next snippet placeholder
             vim.keymap.set({"i", "s"}, "<C-s>,", function() ls.jump(-1) end, {silent = true}) -- Jump to previous snippet placeholder
 
-            vim.keymap.set({"i", "s"}, "<C-E>", function()
+            vim.keymap.set({"i", "s"}, "<C-l>", function()
                 if ls.choice_active() then
                     ls.change_choice(1)
                 end
