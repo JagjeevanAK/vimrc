@@ -1,5 +1,7 @@
 vim.opt.guicursor = ""
 
+vim.opt.completeopt = { "menuone", "noselect" }
+
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
@@ -121,4 +123,3 @@ vim.api.nvim_create_autocmd("BufWritePre", {
         })
     end,
 })
-
