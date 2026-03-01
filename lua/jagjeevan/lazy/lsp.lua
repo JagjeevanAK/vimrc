@@ -41,230 +41,298 @@ return {
             vim.lsp.protocol.make_client_capabilities(),
             cmp_lsp.default_capabilities())
 
+        local function max_float_width()
+            return math.max(60, math.floor(vim.o.columns * 0.6))
+        end
+
+        local function with_wrapped_float(handler, base_opts)
+            return function(err, result, ctx, config)
+                config = vim.tbl_deep_extend("force", base_opts or {}, config or {})
+                config.wrap = true
+                config.max_width = config.max_width or max_float_width()
+                return handler(err, result, ctx, config)
+            end
+        end
+
+        vim.lsp.handlers["textDocument/hover"] = with_wrapped_float(vim.lsp.handlers.hover, {
+            border = "rounded",
+        })
+        vim.lsp.handlers["textDocument/signatureHelp"] = with_wrapped_float(vim.lsp.handlers.signature_help, {
+            border = "rounded",
+        })
+
         require("fidget").setup({})
         require("mason").setup()
+        local ensure_installed = {
+            "lua_ls",
+            "rust_analyzer",
+            "gopls",
+            "pyright",
+            "clangd",
+            "ts_ls",
+            "eslint",
+            "tailwindcss",
+            "emmet_ls",
+        }
+
+        local server_handlers = {
+            function(server_name) -- default handler
+                require("lspconfig")[server_name].setup {
+                    capabilities = capabilities
+                }
+            end,
+
+            ["rust_analyzer"] = function()
+                local lspconfig = require("lspconfig")
+                lspconfig.rust_analyzer.setup {
+                    capabilities = capabilities,
+                    settings = {
+                        ["rust-analyzer"] = {
+                            -- Run checks on save, but keep them lightweight.
+                            checkOnSave = true,
+                            check = {
+                                command = "check",
+                                allTargets = false,
+                                workspace = false,
+                            },
+                        },
+                    },
+                }
+            end,
+
+            zls = function()
+                local lspconfig = require("lspconfig")
+                lspconfig.zls.setup({
+                    root_dir = lspconfig.util.root_pattern(".git", "build.zig", "zls.json"),
+                    settings = {
+                        zls = {
+                            enable_inlay_hints = true,
+                            enable_snippets = true,
+                            warn_style = true,
+                        },
+                    },
+                })
+                vim.g.zig_fmt_parse_errors = 0
+                vim.g.zig_fmt_autosave = 0
+            end,
+
+            ["ts_ls"] = function()
+                local lspconfig = require("lspconfig")
+                lspconfig.ts_ls.setup {
+                    capabilities = capabilities,
+                    filetypes = {
+                        "javascript",
+                        "javascriptreact",
+                        "typescript",
+                        "typescriptreact",
+                        "vue",
+                        "json"
+                    },
+                    settings = {
+                        typescript = {
+                            inlayHints = {
+                                includeInlayParameterNameHints = 'all',
+                                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                                includeInlayFunctionParameterTypeHints = true,
+                                includeInlayVariableTypeHints = true,
+                                includeInlayPropertyDeclarationTypeHints = true,
+                                includeInlayFunctionLikeReturnTypeHints = true,
+                                includeInlayEnumMemberValueHints = true,
+                            }
+                        },
+                        javascript = {
+                            inlayHints = {
+                                includeInlayParameterNameHints = 'all',
+                                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                                includeInlayFunctionParameterTypeHints = true,
+                                includeInlayVariableTypeHints = true,
+                                includeInlayPropertyDeclarationTypeHints = true,
+                                includeInlayFunctionLikeReturnTypeHints = true,
+                                includeInlayEnumMemberValueHints = true,
+                            }
+                        }
+                    }
+                }
+            end,
+
+            ["eslint"] = function()
+                local lspconfig = require("lspconfig")
+                lspconfig.eslint.setup {
+                    capabilities = capabilities,
+                    filetypes = {
+                        "javascript",
+                        "javascriptreact",
+                        "typescript",
+                        "typescriptreact",
+                        "vue",
+                        "svelte"
+                    },
+                    settings = {
+                        codeAction = {
+                            disableRuleComment = {
+                                enable = true,
+                                location = "separateLine"
+                            },
+                            showDocumentation = {
+                                enable = true
+                            }
+                        },
+                        codeActionOnSave = {
+                            enable = false,
+                            mode = "all"
+                        },
+                        format = true,
+                        nodePath = "",
+                        onIgnoredFiles = "off",
+                        packageManager = "npm",
+                        quiet = false,
+                        rulesCustomizations = {},
+                        run = "onType",
+                        useESLintClass = false,
+                        validate = "on",
+                        workingDirectory = {
+                            mode = "location"
+                        }
+                    }
+                }
+            end,
+
+            ["tailwindcss"] = function()
+                local lspconfig = require("lspconfig")
+                lspconfig.tailwindcss.setup {
+                    capabilities = capabilities,
+                    filetypes = {
+                        "html",
+                        "css",
+                        "scss",
+                        "javascript",
+                        "javascriptreact",
+                        "typescript",
+                        "typescriptreact",
+                        "vue",
+                        "svelte"
+                    },
+                    settings = {
+                        tailwindCSS = {
+                            classAttributes = { "class", "className", "class:list", "classList", "ngClass" },
+                            lint = {
+                                cssConflict = "warning",
+                                invalidApply = "error",
+                                invalidConfigPath = "error",
+                                invalidScreen = "error",
+                                invalidTailwindDirective = "error",
+                                invalidVariant = "error",
+                                recommendedVariantOrder = "warning"
+                            },
+                            validate = true
+                        }
+                    }
+                }
+            end,
+
+            ["emmet_ls"] = function()
+                local lspconfig = require("lspconfig")
+                lspconfig.emmet_ls.setup {
+                    capabilities = capabilities,
+                    filetypes = {
+                        "html",
+                        "css",
+                        "scss",
+                        "javascript",
+                        "javascriptreact",
+                        "typescript",
+                        "typescriptreact",
+                        "vue",
+                        "svelte"
+                    },
+                    init_options = {
+                        html = {
+                            options = {
+                                ["bem.enabled"] = true,
+                            },
+                        },
+                    }
+                }
+            end,
+
+            ["lua_ls"] = function()
+                local lspconfig = require("lspconfig")
+                lspconfig.lua_ls.setup {
+                    capabilities = capabilities,
+                    settings = {
+                        Lua = {
+                            runtime = { version = "Lua 5.1" },
+                            diagnostics = {
+                                globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
+                            }
+                        }
+                    }
+                }
+            end,
+            ["pyright"] = function()  -- Python server configuration
+                local lspconfig = require("lspconfig")
+                local util = require("lspconfig.util")
+
+                local function find_nearest_venv(start_dir)
+                    local dir = start_dir
+                    while dir and dir ~= "" do
+                        local candidate = util.path.join(dir, ".venv")
+                        if vim.fn.isdirectory(candidate) == 1 then
+                            return candidate
+                        end
+                        local parent = util.path.dirname(dir)
+                        if parent == dir then
+                            break
+                        end
+                        dir = parent
+                    end
+                end
+
+                lspconfig.pyright.setup {
+                    capabilities = capabilities,
+                    filetypes = { "python" },  -- Ensure it only works for Python files
+                    root_dir = function(fname)
+                        return util.root_pattern(
+                            ".venv",
+                            "pyproject.toml",
+                            "setup.py",
+                            "setup.cfg",
+                            "requirements.txt",
+                            "Pipfile",
+                            "pyrightconfig.json",
+                            ".git"
+                        )(fname) or util.path.dirname(fname)
+                    end,
+                    on_new_config = function(new_config, root_dir)
+                        local venv_dir = find_nearest_venv(root_dir)
+                        local python = venv_dir and util.path.join(venv_dir, "bin", "python") or nil
+                        if python and vim.fn.executable(python) == 1 then
+                            new_config.settings = vim.tbl_deep_extend("force", new_config.settings or {}, {
+                                python = {
+                                    pythonPath = python,
+                                },
+                            })
+                        end
+                    end,
+                }
+            end,
+
+            ["clangd"] = function()  -- C/C++ server configuration
+                local lspconfig = require("lspconfig")
+                lspconfig.clangd.setup {
+                    capabilities = capabilities,
+                }
+            end,
+        }
+
         require("mason-lspconfig").setup({
-            ensure_installed = {
-                "lua_ls",
-                "rust_analyzer",
-                "gopls",
-                "pyright",
-                "clangd",
-                "ts_ls",
-                "eslint",
-                "tailwindcss",
-                "emmet_ls",
-            },
-            handlers = {
-                function(server_name) -- default handler (optional)
-                    require("lspconfig")[server_name].setup {
-                        capabilities = capabilities
-                    }
-                end,
-
-                ["rust_analyzer"] = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.rust_analyzer.setup {
-                        capabilities = capabilities,
-                        settings = {
-                            ["rust-analyzer"] = {
-                                -- Run checks on save, but keep them lightweight.
-                                checkOnSave = true,
-                                check = {
-                                    command = "check",
-                                    allTargets = false,
-                                    workspace = false,
-                                },
-                            },
-                        },
-                    }
-                end,
-
-                zls = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.zls.setup({
-                        root_dir = lspconfig.util.root_pattern(".git", "build.zig", "zls.json"),
-                        settings = {
-                            zls = {
-                                enable_inlay_hints = true,
-                                enable_snippets = true,
-                                warn_style = true,
-                            },
-                        },
-                    })
-                    vim.g.zig_fmt_parse_errors = 0
-                    vim.g.zig_fmt_autosave = 0
-                end,
-
-                ["ts_ls"] = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.ts_ls.setup {
-                        capabilities = capabilities,
-                        filetypes = { 
-                            "javascript", 
-                            "javascriptreact", 
-                            "typescript", 
-                            "typescriptreact",
-                            "vue",
-                            "json"
-                        },
-                        settings = {
-                            typescript = {
-                                inlayHints = {
-                                    includeInlayParameterNameHints = 'all',
-                                    includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                                    includeInlayFunctionParameterTypeHints = true,
-                                    includeInlayVariableTypeHints = true,
-                                    includeInlayPropertyDeclarationTypeHints = true,
-                                    includeInlayFunctionLikeReturnTypeHints = true,
-                                    includeInlayEnumMemberValueHints = true,
-                                }
-                            },
-                            javascript = {
-                                inlayHints = {
-                                    includeInlayParameterNameHints = 'all',
-                                    includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                                    includeInlayFunctionParameterTypeHints = true,
-                                    includeInlayVariableTypeHints = true,
-                                    includeInlayPropertyDeclarationTypeHints = true,
-                                    includeInlayFunctionLikeReturnTypeHints = true,
-                                    includeInlayEnumMemberValueHints = true,
-                                }
-                            }
-                        }
-                    }
-                end,
-
-                ["eslint"] = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.eslint.setup {
-                        capabilities = capabilities,
-                        filetypes = { 
-                            "javascript", 
-                            "javascriptreact", 
-                            "typescript", 
-                            "typescriptreact",
-                            "vue",
-                            "svelte"
-                        },
-                        settings = {
-                            codeAction = {
-                                disableRuleComment = {
-                                    enable = true,
-                                    location = "separateLine"
-                                },
-                                showDocumentation = {
-                                    enable = true
-                                }
-                            },
-                            codeActionOnSave = {
-                                enable = false,
-                                mode = "all"
-                            },
-                            format = true,
-                            nodePath = "",
-                            onIgnoredFiles = "off",
-                            packageManager = "npm",
-                            quiet = false,
-                            rulesCustomizations = {},
-                            run = "onType",
-                            useESLintClass = false,
-                            validate = "on",
-                            workingDirectory = {
-                                mode = "location"
-                            }
-                        }
-                    }
-                end,
-
-                ["tailwindcss"] = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.tailwindcss.setup {
-                        capabilities = capabilities,
-                        filetypes = { 
-                            "html", 
-                            "css", 
-                            "scss", 
-                            "javascript", 
-                            "javascriptreact", 
-                            "typescript", 
-                            "typescriptreact",
-                            "vue",
-                            "svelte"
-                        },
-                        settings = {
-                            tailwindCSS = {
-                                classAttributes = { "class", "className", "class:list", "classList", "ngClass" },
-                                lint = {
-                                    cssConflict = "warning",
-                                    invalidApply = "error",
-                                    invalidConfigPath = "error",
-                                    invalidScreen = "error",
-                                    invalidTailwindDirective = "error",
-                                    invalidVariant = "error",
-                                    recommendedVariantOrder = "warning"
-                                },
-                                validate = true
-                            }
-                        }
-                    }
-                end,
-
-                ["emmet_ls"] = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.emmet_ls.setup {
-                        capabilities = capabilities,
-                        filetypes = { 
-                            "html", 
-                            "css", 
-                            "scss", 
-                            "javascript", 
-                            "javascriptreact", 
-                            "typescript", 
-                            "typescriptreact",
-                            "vue",
-                            "svelte"
-                        },
-                        init_options = {
-                            html = {
-                                options = {
-                                    ["bem.enabled"] = true,
-                                },
-                            },
-                        }
-                    }
-                end,
-
-                ["lua_ls"] = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.lua_ls.setup {
-                        capabilities = capabilities,
-                        settings = {
-                            Lua = {
-                                runtime = { version = "Lua 5.1" },
-                                diagnostics = {
-                                    globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
-                                }
-                            }
-                        }
-                    }
-               end,
-                ["pyright"] = function()  -- Python server configuration
-                    local lspconfig = require("lspconfig")
-                    lspconfig.pyright.setup {
-                        capabilities = capabilities,
-                        filetypes = { "python" },  -- Ensure it only works for Python files
-                    }
-                end,
-
-                ["clangd"] = function()  -- C/C++ server configuration
-                    local lspconfig = require("lspconfig")
-                    lspconfig.clangd.setup {
-                        capabilities = capabilities,
-                    }
-                end,
-            }
+            automatic_enable = false,
+            ensure_installed = ensure_installed,
         })
+        for _, server_name in ipairs(ensure_installed) do
+            local handler = server_handlers[server_name] or server_handlers[1]
+            handler(server_name)
+        end
 
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
@@ -385,6 +453,8 @@ return {
                 source = "always",
                 header = "",
                 prefix = "",
+                wrap = true,
+                max_width = max_float_width(),
             },
         })
     end

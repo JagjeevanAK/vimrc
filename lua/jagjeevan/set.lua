@@ -13,6 +13,10 @@ vim.opt.expandtab = true
 vim.opt.smartindent = true
 vim.opt.autoindent = true
 
+local function max_float_width()
+    return math.max(60, math.floor(vim.o.columns * 0.6))
+end
+
 -- Enable filetype detection, plugins, and indentation
 vim.cmd("filetype plugin indent on")
 
@@ -41,11 +45,158 @@ vim.diagnostic.config({
         source = "always",
         header = "",
         prefix = "",
+        wrap = true,
+        max_width = max_float_width(),
     },
 })
+local original_open_float = vim.diagnostic.open_float
+vim.diagnostic.open_float = function(bufnr, opts)
+    opts = opts or {}
+    opts.wrap = true
+    opts.max_width = opts.max_width or max_float_width()
+    return original_open_float(bufnr, opts)
+end
 
 vim.opt.wrap = false
 vim.opt.linebreak = true
+vim.opt.breakindent = true
+
+local wrap_group = vim.api.nvim_create_augroup("MainEditorWrap", { clear = true })
+local function update_main_editor_wrap()
+    local wins = vim.api.nvim_tabpage_list_wins(0)
+    local non_float_wins = {}
+
+    for _, win in ipairs(wins) do
+        if vim.api.nvim_win_get_config(win).relative == "" then
+            table.insert(non_float_wins, win)
+        end
+    end
+
+    local should_wrap = #non_float_wins == 1
+    for _, win in ipairs(non_float_wins) do
+        local bufnr = vim.api.nvim_win_get_buf(win)
+        if vim.bo[bufnr].buftype == "" then
+            vim.wo[win].wrap = should_wrap
+            vim.wo[win].linebreak = true
+            vim.wo[win].breakindent = should_wrap
+        end
+    end
+end
+
+vim.api.nvim_create_autocmd({ "VimEnter", "WinNew", "WinClosed", "BufWinEnter", "TabEnter" }, {
+    group = wrap_group,
+    callback = update_main_editor_wrap,
+})
+
+local uv = vim.uv or vim.loop
+local base_python_env = {
+    path = vim.env.PATH or "",
+    virtual_env = vim.env.VIRTUAL_ENV or "",
+}
+
+local function path_is_dir(path)
+    local stat = uv.fs_stat(path)
+    return stat and stat.type == "directory"
+end
+
+local function parent_dir(path)
+    local parent = vim.fs.dirname(path)
+    if not parent or parent == path then
+        return nil
+    end
+    return parent
+end
+
+local function collect_venv_chain(start_dir)
+    local chain = {}
+    local dir = start_dir
+    while dir do
+        local venv = dir .. "/.venv"
+        if path_is_dir(venv) then
+            table.insert(chain, venv)
+        end
+        dir = parent_dir(dir)
+    end
+    return chain
+end
+
+local function split_path(path)
+    local parts = {}
+    for part in string.gmatch(path or "", "([^:]+)") do
+        table.insert(parts, part)
+    end
+    return parts
+end
+
+local function unique_path(parts)
+    local seen = {}
+    local out = {}
+    for _, part in ipairs(parts) do
+        if part ~= "" and not seen[part] then
+            seen[part] = true
+            table.insert(out, part)
+        end
+    end
+    return out
+end
+
+local function switch_python_env_for_buf(bufnr)
+    if not vim.api.nvim_buf_is_valid(bufnr) then
+        return
+    end
+    if vim.bo[bufnr].buftype ~= "" then
+        return
+    end
+
+    local bufname = vim.api.nvim_buf_get_name(bufnr)
+    local start_dir = ""
+    if bufname ~= "" then
+        start_dir = vim.fs.dirname(bufname)
+    else
+        start_dir = uv.cwd() or ""
+    end
+    if start_dir == "" then
+        return
+    end
+
+    local venv_chain = collect_venv_chain(start_dir)
+    local chain_key = table.concat(venv_chain, ";")
+    if vim.g.active_python_venv_chain == chain_key then
+        return
+    end
+    vim.g.active_python_venv_chain = chain_key
+
+    local updated_path = {}
+    for _, venv in ipairs(venv_chain) do
+        table.insert(updated_path, venv .. "/bin")
+    end
+    for _, base_part in ipairs(split_path(base_python_env.path)) do
+        table.insert(updated_path, base_part)
+    end
+    vim.env.PATH = table.concat(unique_path(updated_path), ":")
+
+    if venv_chain[1] then
+        vim.env.VIRTUAL_ENV = venv_chain[1]
+    elseif base_python_env.virtual_env ~= "" then
+        vim.env.VIRTUAL_ENV = base_python_env.virtual_env
+    else
+        vim.env.VIRTUAL_ENV = nil
+    end
+end
+
+local python_venv_group = vim.api.nvim_create_augroup("PythonVenvSwitch", { clear = true })
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "DirChanged" }, {
+    group = python_venv_group,
+    callback = function(args)
+        local bufnr = args.buf or vim.api.nvim_get_current_buf()
+        switch_python_env_for_buf(bufnr)
+    end,
+})
+
+vim.api.nvim_create_user_command("VenvInfo", function()
+    local active = vim.env.VIRTUAL_ENV or "none"
+    vim.notify("VIRTUAL_ENV: " .. active)
+end, { desc = "Show current active Python virtualenv" })
 
 vim.opt.swapfile = false
 vim.opt.backup = false
