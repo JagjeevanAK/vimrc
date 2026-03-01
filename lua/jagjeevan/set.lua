@@ -22,10 +22,39 @@ vim.cmd("filetype plugin indent on")
 
 -- Configure diagnostics to show errors inline automatically
 vim.diagnostic.config({
+    -- Hybrid diagnostics:
+    -- - non-cursor lines: short inline virtual text
+    -- - cursor line: full wrapped virtual lines
     virtual_text = {
-        prefix = "●", -- Could be '■', '▎', 'x', '●', etc.
-        spacing = 4,
-        source = "if_many", -- Show source if there are multiple diagnostics
+        prefix = function(diagnostic)
+            local cursor_lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
+            local start_lnum = diagnostic.lnum or -1
+            local end_lnum = diagnostic.end_lnum or start_lnum
+            if cursor_lnum >= start_lnum and cursor_lnum <= end_lnum then
+                return ""
+            end
+            return "●"
+        end,
+        spacing = 2,
+        source = "if_many",
+        format = function(diagnostic)
+            local cursor_lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
+            local start_lnum = diagnostic.lnum or -1
+            local end_lnum = diagnostic.end_lnum or start_lnum
+            if cursor_lnum >= start_lnum and cursor_lnum <= end_lnum then
+                return ""
+            end
+            local one_line = (diagnostic.message or ""):gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+            local max_len = math.max(40, math.floor(vim.o.columns * 0.35))
+            if #one_line > max_len then
+                return one_line:sub(1, max_len - 1) .. "…"
+            end
+            return one_line
+        end,
+    },
+    virtual_lines = {
+        current_line = true,
+        source = "if_many",
     },
     signs = {
         text = {
@@ -49,6 +78,23 @@ vim.diagnostic.config({
         max_width = max_float_width(),
     },
 })
+
+local diagnostic_cursor_refresh_group = vim.api.nvim_create_augroup("DiagnosticCursorRefresh", { clear = true })
+vim.api.nvim_create_autocmd({ "CursorMoved", "BufEnter" }, {
+    group = diagnostic_cursor_refresh_group,
+    callback = function(args)
+        local bufnr = args.buf or vim.api.nvim_get_current_buf()
+        if not vim.api.nvim_buf_is_valid(bufnr) then
+            return
+        end
+        if vim.bo[bufnr].buftype ~= "" then
+            return
+        end
+        -- Re-render diagnostics so cursor-line/full and non-cursor/short views stay accurate.
+        vim.diagnostic.show(nil, bufnr)
+    end,
+})
+
 local original_open_float = vim.diagnostic.open_float
 vim.diagnostic.open_float = function(bufnr, opts)
     opts = opts or {}
@@ -140,6 +186,10 @@ local function unique_path(parts)
     return out
 end
 
+local function mason_bin_path()
+    return vim.fn.stdpath("data") .. "/mason/bin"
+end
+
 local function switch_python_env_for_buf(bufnr)
     if not vim.api.nvim_buf_is_valid(bufnr) then
         return
@@ -169,6 +219,10 @@ local function switch_python_env_for_buf(bufnr)
     local updated_path = {}
     for _, venv in ipairs(venv_chain) do
         table.insert(updated_path, venv .. "/bin")
+    end
+    local mason_bin = mason_bin_path()
+    if path_is_dir(mason_bin) then
+        table.insert(updated_path, mason_bin)
     end
     for _, base_part in ipairs(split_path(base_python_env.path)) do
         table.insert(updated_path, base_part)

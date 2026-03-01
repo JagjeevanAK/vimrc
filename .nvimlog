@@ -1,0 +1,4 @@
+WRN 2026-03-01T11:05:23.169 ?.65106    server_start:193: Failed to start server: operation not permitted: /var/folders/3q/chxt13114pb8vrdhhmml6f9m0000gn/T/nvim.jagjeevankashid/Hj4XZM/nvim.65106.0
+WRN 2026-03-01T11:06:02.368 ?.65651    server_start:193: Failed to start server: operation not permitted: /var/folders/3q/chxt13114pb8vrdhhmml6f9m0000gn/T/nvim.jagjeevankashid/GX0Jti/nvim.65651.0
+WRN 2026-03-01T11:10:05.222 ?.69463    server_start:193: Failed to start server: operation not permitted: /var/folders/3q/chxt13114pb8vrdhhmml6f9m0000gn/T/nvim.jagjeevankashid/Iab1sg/nvim.69463.0
+WRN 2026-03-01T11:26:22.796 ?.84141    server_start:193: Failed to start server: operation not permitted: /var/folders/3q/chxt13114pb8vrdhhmml6f9m0000gn/T/nvim.jagjeevankashid/YbCk0Q/nvim.84141.0
