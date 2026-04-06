@@ -2,7 +2,7 @@
 vim.g.mapleader = " "
 
 -- File Explorer
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex) -- Open file explorer (netrw) in current directory
+vim.keymap.set("n", "<leader>pv", "<CMD>Oil<CR>", { desc = "Open file explorer" }) -- Open file explorer in current directory
 
 -- Clipboard operations
 vim.api.nvim_set_keymap('v', 'yyy', '"+y', { noremap = true, silent = true }) -- Copy selection to system clipboard
@@ -120,4 +120,3 @@ end, { desc = "Smart 0: toggle between ^ and 0" })
 vim.keymap.set("n", "<leader><leader>", function()
     vim.cmd("so")
 end) -- Source/reload current configuration file
-
